@@ -1,0 +1,782 @@
+	<!DOCTYPE html>
+	<html lang="pl">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Aplikacja Do Zamówień Publicznych</title>
+		<style>
+			body {
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				background-image: url('background.jpg');
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-size: cover;
+				margin: 20px;
+				padding: 20px;
+				border-radius: 10px;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			}
+			h1 {
+				text-align: center;
+				color: #333;
+			}
+			.form-group {
+				margin-bottom: 20px;
+			}
+			.form-group label {
+				display: block;
+				margin-bottom: 8px;
+				font-weight: bold;
+				color: #555;
+			}
+			.form-group input, .form-group textarea, .form-group select {
+				width: 100%;
+				padding: 10px;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+				box-sizing: border-box;
+				font-size: 16px;
+			}
+			.form-group input:focus, .form-group textarea:focus {
+				border-color: #007BFF;
+				outline: none;
+				box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+			}
+			.image-preview {
+				width: 100%;
+				height: auto;
+				margin-top: 10px;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+			}
+			button {
+				display: inline-block;
+				background-color: #007BFF;
+				color: white;
+				padding: 10px 20px;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				font-size: 16px;
+			}
+			.button_lock{
+				display: inline-block;
+				background-color: white;
+				color: white;
+				padding: 0px 0px;
+				border: none;
+				cursor: pointer;
+				font-size: 16px;
+				width:30px;
+				height:30px;
+			}
+			button:hover {
+				background-color: #0056b3;
+			}
+			.container {
+				max-width: 800px;
+				margin: 0 auto;
+				padding: 20px;
+				background-color: #fff;
+				border-radius: 10px;
+				box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+			}
+			h2 {
+				border-bottom: 2px solid #007BFF;
+				padding-bottom: 10px;
+				color: #007BFF;
+			}
+			
+
+		</style>
+	</head>
+	<body>
+
+		<div class="container">
+			<img id="logo" src="logo_legendary.png" alt="Logo" style="display: block; margin-left: auto; margin-right: auto; width: 5%;">
+			<h1>Aplikacja Do Zamówień Publicznych</h1>
+			<img id="logo_SKNL" src="logo_SKNL.png" alt="LogoSKNL" style="display: none;">
+
+		<div class="form-group">
+			<label for="data">Data:</label>
+			<div>
+				<input type="text" id="data" readonly style="width:90%;">
+				<button type="button" onclick="toggleReadonly('data')" class="button_lock">
+					<img src="lock.png" id="data-icon" alt="Edytuj" style="width:20px; height:20px;">
+				</button>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="opiekun">Opiekun:</label>
+			<div>
+				<input type="text" id="opiekun" readonly style="width:90%;">
+				<button type="button" onclick="toggleReadonly('opiekun')" class="button_lock">
+					<img src="lock.png" id="opiekun-icon" alt="Edytuj" style="width:20px; height:20px;">
+				</button>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="specyfikacja">Specyfikacja produktu (opis):</label>
+			<textarea id="specyfikacja" rows="10"></textarea>
+		</div>
+
+		<div class="form-group">
+			<label for="specyfikacjaTech">Specyfikacja techniczna:</label>
+			<textarea id="specyfikacjaTech" rows="5"></textarea>
+		</div>
+
+		<h2>Oferta</h2>
+
+		<div class="form-group">
+			<label for="nazwaOferty1">Nazwa oferty:</label>
+			<textarea id="nazwaOferty1"></textarea>
+		</div>
+
+		<div class="form-group">
+			<label for="linkOferty1">Link:</label>
+			<textarea id="linkOferty1"></textarea>
+		</div>
+
+		<div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+			<label for="cenaOferty1">Cena [zł]:</label>
+			<input type="number" id="cenaOferty1" step="0.01" style="width: 100px;">
+
+			<label for="dostawaOferty1">Dostawa [zł]:</label>
+			<input type="number" id="dostawaOferty1" step="0.01" style="width: 100px;">
+
+		</div>
+		<div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+			<label for="vat">VAT [%]:</label>
+			
+			
+			<input type="number" id="vat" value="23" readonly min="0" step="0.01" style="width: 100px;">
+			<button type="button" onclick="toggleReadonly('vat')" class="button_lock">
+					<img src="lock.png" id="vat-icon" alt="Edytuj" style="width:20px; height:20px;">
+			</button>
+			
+			<label for="vat">Dostawa VAT [%]:</label>
+			<input type="number" id="dvat" value="23" readonly min="0" step="0.01" style="width: 100px;">
+			
+			<button type="button" onclick="toggleReadonly('dvat')" class="button_lock">
+					<img src="lock.png" id="dvat-icon" alt="Edytuj" style="width:20px; height:20px;">
+			</button>
+		</div>
+
+		<div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+			<label>
+				<input type="radio" name="cenaTyp" id="cenaNetto" value="netto"> Netto
+			</label>
+			<label>
+				<input type="radio" name="cenaTyp" id="cenaBrutto" value="brutto" checked > Brutto
+			</label>
+			<label>
+				<input type="radio" name="cenaTypDostawa" id="cenaNettoDostawa" value="nettodos"> Dostawa Netto
+			</label>
+			<label>
+				<input type="radio" name="cenaTypDostawa" id="cenaBruttoDostawa" value="bruttodos" checked> Dostawa Brutto
+			</label>
+		</div>
+		
+		<div class="form-group">
+			<p style="color: red;"><i>Na zdjęciu musi być widoczna nazwa sklepu i cena. Zamieść 2 zdjęcia, jedną z przedmiotem, a drugą z kosztami dostawy (najtańszy kurier)</i></p>
+			<label for="uploadPhoto1">Załaduj zdjęcie 1:</label>
+			<input type="file" id="uploadPhoto1" accept="image/*" onchange="previewImage(event, 'photo1')">
+			<img id="photo1" class="image-preview" alt="Zdjęcie 1" />
+		</div>
+		<div class="form-group">
+			<label for="deliveryPhoto1">Załaduj zdjęcie dostawy 1:</label>
+			<input type="file" id="deliveryPhoto1" accept="image/*" onchange="previewImage(event, 'delivery1')">
+			<img id="delivery1" class="image-preview" alt="Dostawa 1" />
+		</div>
+
+		<h2>Kontroferta</h2>
+
+		<div class="form-group">
+			<label for="nazwaOferty2">Nazwa kontroferty:</label>
+			<textarea id="nazwaOferty2"></textarea>
+		</div>
+
+		<div class="form-group">
+			<label for="linkOferty2">Link:</label>
+			<textarea id="linkOferty2"></textarea>
+		</div>
+
+		<div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+			<label for="cenaOferty2">Cena [zł]:</label>
+			<input type="number" id="cenaOferty2" step="0.01" style="width: 100px;">
+
+			<label for="dostawaOferty2">Dostawa [zł]:</label>
+			<input type="number" id="dostawaOferty2" step="0.01" style="width: 100px;">
+
+		</div>
+		
+		<div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+			<label for="vat">VAT [%]:</label>
+			<input type="number" id="vat2" value="23" readonly min="0" step="0.01" style="width: 100px;">
+			
+			<button type="button" onclick="toggleReadonly('vat2')" class="button_lock">
+					<img src="lock.png" id="vat2-icon" alt="Edytuj" style="width:20px; height:20px;">
+			</button>
+			
+			<label for="vat">Dostawa VAT [%]:</label>
+			<input type="number" id="dvat2" value="23" readonly min="0" step="0.01" style="width: 100px;">
+			
+			<button type="button" onclick="toggleReadonly('dvat2')" class="button_lock">
+					<img src="lock.png" id="dvat2-icon" alt="Edytuj" style="width:20px; height:20px;">
+			</button>
+			
+		</div>
+
+		<div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+			<label>
+				<input type="radio" name="cenaTyp2" id="cenaNetto2" value="netto2"> Netto
+			</label>
+			<label>
+				<input type="radio" name="cenaTyp2" id="cenaBrutto2" value="brutto2" checked > Brutto
+			</label>
+			<label>
+				<input type="radio" name="cenaTypDostawa2" id="cenaNettoDostawa2" value="nettodos2"> Dostawa Netto
+			</label>
+			<label>
+				<input type="radio" name="cenaTypDostawa2" id="cenaBruttoDostawa2" value="bruttodos2" checked> Dostawa Brutto
+			</label>
+		</div>
+		
+		<div class="form-group">
+			<p style="color: red;"><i>Na zdjęciu musi być widoczna nazwa sklepu i cena. Zamieść 2 zdjęcia, jedną z przedmiotem, a drugą z kosztami dostawy (najtańszy kurier)</i></p>
+			<label for="uploadPhoto2">Załaduj zdjęcie 2:</label>
+			<input type="file" id="uploadPhoto1" accept="image/*" onchange="previewImage(event, 'photo2')">
+			<img id="photo2" class="image-preview" alt="Zdjęcie 12" />
+		</div>
+		<div class="form-group">
+			<label for="deliveryPhoto2">Załaduj zdjęcie dostawy 2:</label>
+			<input type="file" id="deliveryPhoto2" accept="image/*" onchange="previewImage(event, 'delivery2')">
+			<img id="delivery2" class="image-preview" alt="Dostawa 2" />
+		</div>
+		
+		<h2>Podsumowanie</h2>
+
+		<div class="form-group">
+			<label for="FinalOffer">Ostateczny wybor oferty:</label>
+			<textarea id="FinalOffer"></textarea>
+		</div>
+		
+		<div class="form-group">
+			<label for="amount">Przeznaczone środki [zł]:</label>
+			<input type="number" id="amount" style="width:20%;">
+			<p style="color: red;" ><i>Tutaj wpisujemy przeznaczone środki na zamówienie (suma z wybranej oferty + sensowny naddatek
+				(zazwyczaj 20-30% np. wyszło 109,87 to dajemy 140, bo inflacja, zmiany cen itd.)<i></p>
+		</div>
+		
+		
+		<div class="form-group">
+			<label for="SourceOfFunding">Źródło finansowania:</label>
+			<div>
+				<select id="sourceFundingSelect" onchange="handleSelectChange()">
+					<option value="">Wybierz źródło finansowania</option>
+					<option value="Środki Rektora">Środki Rektora</option>
+					<option value="Środki SKNTI">Środki SKNTI</option>
+					<option value="Inne">Inne</option>
+				</select>
+				<input type="text" id="sourceFundingInput" placeholder="Wprowadź własne źródło" style="display: none;" />
+				
+				<div class="form-group" id="SKNTI" style="display: none;">
+					<p style="color: red;"><i>Płatne ze środków Ministerstwa Nauki i Szkolnictwa Wyższego na podstawie umowy nr SKN/SP/601717/2024 z dnia 28.05.2024, działanie nr ... w kwocie ... zł.</i></p>
+					<label for="SKNTINr">Wybierz nr Działania:</label>
+					<select id="SKNTINr" onchange="handleSelectChange()">
+						<option value="1">nr. 1</option>
+						<option value="2">nr. 2</option>
+						<option value="3">nr. 3</option>
+					</select>
+					<label for="SKNTICost">Wpisz kwotę:</label>
+					<textarea id="SKNTICost"></textarea>
+				</div>
+				
+				<div class="form-group" id="NameArea">
+					<label for="Name">Wpisz numer zamówienia/nazwę pliku (np.3_3):</label>
+					<textarea id="Name"></textarea>
+				</div>
+			</div>
+		</div>
+
+
+		<button onclick="generatePDF()">Generuj PDF</button>
+		<p style="color: grey;" ><i>Aplikacja działa tylko dla pojedyńczych zamówień. Nie pozwala złożyć zamówienia na kilka przedmiotów z jednego sklepu naraz. 
+		Opiekunem programu jest Paweł Władyka, w sprawie poprawek zapraszam do kontaktu na Messenger / Discord.</i></p>
+	</div>
+	
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	<script>
+	
+		function toggleReadonly(fieldId) {
+			const field = document.getElementById(fieldId);
+			const icon = document.getElementById(fieldId + '-icon');
+			
+			if (field.hasAttribute('readonly')) {
+				field.removeAttribute('readonly');
+				icon.src = 'unlock.png'; // Zmień ikonę na otwartą kłódkę
+			} else {
+				field.setAttribute('readonly', true);
+				icon.src = 'lock.png'; // Zmień ikonę na zamkniętą kłódkę
+			}
+		}
+		
+		function handleSelectChange() {
+			const select = document.getElementById('sourceFundingSelect');
+			const input = document.getElementById('sourceFundingInput');
+			const SKNTI = document.getElementById('SKNTI');
+
+			// Jeśli wybrana opcja to "Inne", wyświetl pole tekstowe
+			if (select.value === 'Inne') {
+				input.style.display = 'inline';
+				input.focus();
+				SKNTI.style.display = 'none';
+			} 
+			else if (select.value === 'Środki SKNTI') {
+				input.style.display = 'none';
+				input.value = '';
+				SKNTI.style.display = 'inline';
+				SKNTI.focus();
+			} 
+			else {
+				input.style.display = 'none';
+				SKNTI.style.display = 'none';
+				input.value = '';
+			}
+		}
+
+		window.onload = function() {
+			document.getElementById('data').value = "Rzeszów, dnia " + new Date().toLocaleDateString("pl-PL");
+			document.getElementById('opiekun').value = "dr. inż. Tomasz Lis";
+			document.getElementById('FinalOffer').value = "Ze względu na korzystniejszą ofertę cenową lub dostępność wygrała oferta";
+		};
+
+		function previewImage(event, imgId) {
+			const img = document.getElementById(imgId);
+			img.src = URL.createObjectURL(event.target.files[0]);
+		}
+
+		function generatePDF() {
+			const { jsPDF } = window.jspdf;
+			const doc = new jsPDF();
+			
+			
+			// Sprawdzenie, czy pole tekstowe jest widoczne i czy zawiera wartość
+			const sourceFundingSelect = document.getElementById('sourceFundingSelect');
+			const sourceFundingInput = document.getElementById('sourceFundingInput');
+
+			// Jeśli wybrano "Inne", użyj wartości z pola tekstowego
+			const sourceFundingValue = sourceFundingSelect.value === 'Inne' ? sourceFundingInput.value : sourceFundingSelect.value;
+			
+			const cenaOferty1 = parseFloat(document.getElementById('cenaOferty1').value) || 0;
+			const dostawaOferty1 = parseFloat(document.getElementById('dostawaOferty1').value) || 0;
+			const isNetto = document.getElementById('cenaNetto').checked;
+			const isNettoDos = document.getElementById('cenaNettoDostawa').checked;
+			const vatPercentage = parseFloat(document.getElementById('vat').value) || 0;
+			const dvatPercentage = parseFloat(document.getElementById('dvat').value) || 0;
+			
+			
+			let totalCena;
+			let nettocena;
+			if (isNetto) {
+				const vatAmount = cenaOferty1 * (vatPercentage / 100);
+				totalCena = cenaOferty1 + vatAmount;
+				nettocena = cenaOferty1;
+			} else {
+				totalCena = cenaOferty1;
+				nettocena = cenaOferty1 / (1 + vatPercentage / 100);
+			}
+			
+			let totalCenaDostawy
+			let nettocenadostawy;
+			if (isNettoDos) {
+				const vatDelivery = dostawaOferty1 * (dvatPercentage / 100);
+				totalCenaDostawy = dostawaOferty1 + vatDelivery;
+				nettocenadostawy = dostawaOferty1;
+			} else {
+				totalCenaDostawy = dostawaOferty1;
+				nettocenadostawy = dostawaOferty1 / (1 + dvatPercentage / 100);
+			}
+			
+			const cenaOferty2 = parseFloat(document.getElementById('cenaOferty2').value) || 0;
+			const dostawaOferty2 = parseFloat(document.getElementById('dostawaOferty2').value) || 0;
+			const isNetto2 = document.getElementById('cenaNetto2').checked;
+			const isNettoDos2 = document.getElementById('cenaNettoDostawa2').checked;
+			const vatPercentage2 = parseFloat(document.getElementById('vat2').value) || 0;
+			const dvatPercentage2 = parseFloat(document.getElementById('dvat2').value) || 0;
+			
+			let totalCena2;
+			let nettocena2;
+			if (isNetto2) {
+				const vatAmount2 = cenaOferty2 * (vatPercentage2 / 100);
+				totalCena2 = cenaOferty2 + vatAmount2;
+				nettocena2 = cenaOferty2;
+			} else {
+				totalCena2 = cenaOferty2;
+				nettocena2 = cenaOferty2 / (1 + vatPercentage2 / 100);
+			}
+			
+			
+			let totalCenaDostawy2
+			let nettocenadostawy2;
+			if (isNettoDos2) {
+				const vatDelivery2 = dostawaOferty2 * (dvatPercentage2 / 100);
+				totalCenaDostawy2 = dostawaOferty2 + vatDelivery2;
+				nettocenadostawy2 = dostawaOferty2;
+			} else {
+				totalCenaDostawy2 = dostawaOferty2;
+				nettocenadostawy2 = dostawaOferty2 / (1 + dvatPercentage2 / 100);
+			}
+		
+			const srednia = (nettocena + nettocenadostawy + nettocena2 + nettocenadostawy2)/2
+
+			// Dodanie czcionek
+			doc.addFileToVFS('times.ttf');
+			doc.addFont('times.ttf', 'TimesNewRoman', 'normal');
+			doc.addFileToVFS('timesbd.ttf');
+			doc.addFont('timesbd.ttf', 'TimesNewRoman', 'bold');
+			doc.addFileToVFS('timesi.ttf');
+			doc.addFont('timesi.ttf', 'TimesNewRoman', 'italic');
+
+			// Add logo
+			const logo = document.getElementById('logo_SKNL').src;
+			doc.addImage(logo, 'PNG', 10, 30, 30, 30);
+
+			// Ustalamy początkową pozycję Y oraz odstęp
+			let currentY = 20; // Początkowa pozycja Y
+			const spacing = 10; // Odstęp między elementami
+			const pageHeight = 297; // Wysokość strony A4 w mm
+
+			// Funkcja do sprawdzania, czy nowa strona jest potrzebna
+			function checkAddPage() {
+				if (currentY > pageHeight - 20) { // Jeśli Y przekracza wysokość strony minus margines
+					doc.addPage();
+					currentY = 10; // Zresetowanie pozycji Y dla nowej strony
+				}
+			}
+			
+			function checkAddPage2() {
+				if (currentY > pageHeight - 100) { // Jeśli Y przekracza wysokość strony minus margines
+					doc.addPage();
+					currentY = 20; // Zresetowanie pozycji Y dla nowej strony
+				}
+			}
+
+			function addSKNTIWarning(doc, currentY, spacing) {
+				doc.setFont('TimesNewRoman', 'bold');
+
+				// Tekst, który chcesz wyświetlić
+				const warningText = "UWAGA – TO ZAMÓWIENIE MUSI BYĆ ZREALIZOWANE ZE ŚRODKÓW Z PROJEKTU SKNTI NA PODSTAWIE UMOWY nr SKN/SP/601717/2024 z dnia 28.05.2024, PROSZĘ NIE OPŁACAĆ GO KARTĄ";
+
+				// Podzielenie tekstu na linie, maksymalna szerokość to 170 mm
+				const wrappedText = doc.splitTextToSize(warningText, 170);
+
+				wrappedText.forEach((line, index) => {
+					const yPosition = currentY + index * spacing;  // Pozycja Y dla każdej linii
+
+					// Obliczenie szerokości całej linii tekstu
+					const lineWidth = doc.getTextWidth(line);
+
+					// Wyśrodkowanie - obliczenie pozycji X
+					const centerX = (doc.internal.pageSize.width - lineWidth) / 2;
+
+					// Zmienna do trzymania bieżącej pozycji X (wyśrodkowana)
+					let currentX = centerX;
+
+					// Zakreślenie każdej litery osobno
+					for (let char of line) {
+						const charWidth = doc.getTextWidth(char);  // Szerokość konkretnego znaku
+
+						// Rysowanie zakreślenia za tekstem (czerwony "zakreślacz")
+						doc.setFillColor(255, 0, 0);  // Czerwony kolor zakreślacza
+						doc.rect(currentX, yPosition - 6, charWidth + 0.5, spacing, 'F');  // Prostokąt pod literą
+
+						// Wyświetlenie tekstu na zakreśleniu
+						doc.setTextColor(0, 0, 0);  // Czarny tekst
+						doc.text(char, currentX, yPosition);
+
+						currentX += charWidth;  // Przesunięcie pozycji X o szerokość litery
+					}
+				});
+
+				// Przesunięcie currentY o ilość linii
+				currentY += wrappedText.length * spacing;
+				
+				// Sprawdzenie, czy trzeba dodać nową stronę
+				checkAddPage();
+
+				// Zresetowanie czcionki i koloru
+				doc.setFont('TimesNewRoman', 'normal');
+				doc.setTextColor(0, 0, 0);
+
+				// Zwracanie zaktualizowanego currentY
+				return currentY;
+			}
+
+
+
+			// Add title and basic info
+			doc.setFontSize(12);
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Studenckie Koło Naukowe Lotników", 10, currentY);
+
+			doc.setFont('TimesNewRoman', 'normal');
+			doc.text(document.getElementById('data').value, 150, currentY);
+			currentY = currentY + 60;
+			checkAddPage();
+
+			doc.text("Opiekun: " + document.getElementById('opiekun').value, 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+
+			doc.text("Katedra: Inżynierii Lotniczej i Kosmicznej", 10, currentY);
+			currentY += spacing;
+			currentY += spacing;
+			checkAddPage();
+
+			// Add main section title
+			doc.setFontSize(16);
+			doc.text("Zamówienie publiczne", 80, currentY);
+			currentY += spacing;
+			checkAddPage();
+			
+			if (sourceFundingSelect.value === 'Środki SKNTI') {
+				doc.setFontSize(12);
+				currentY = addSKNTIWarning(doc, currentY, spacing);
+			}
+
+			// Add product specification
+			doc.setFontSize(12);
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Specyfikacja produktu (opis):", 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+
+			// Używamy splitTextToSize do obsługi wielowierszowego tekstu
+			const specyfikacjaText = document.getElementById('specyfikacja').value;
+			const splitSpecyfikacja = doc.splitTextToSize(specyfikacjaText, 190); // Dostosuj szerokość do 190 mm
+			doc.setFont('TimesNewRoman', 'normal');
+			doc.text(splitSpecyfikacja, 10, currentY);
+			currentY += (splitSpecyfikacja.length * 5) + spacing;
+			checkAddPage();
+
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Specyfikacja techniczna:", 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+
+			const specyfikacjaTechText = document.getElementById('specyfikacjaTech').value;
+			const splitSpecyfikacjaTech = doc.splitTextToSize(specyfikacjaTechText, 190);
+			doc.setFont('TimesNewRoman', 'normal');
+			doc.text(splitSpecyfikacjaTech, 10, currentY);
+			currentY += (splitSpecyfikacjaTech.length * 5) + spacing;
+			checkAddPage();
+
+			// Add offer information
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Nazwa oferty: ", 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+
+			doc.setFont('TimesNewRoman', 'normal');
+			doc.text(document.getElementById('nazwaOferty1').value, 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Link: ", 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+
+			doc.setFont('TimesNewRoman', 'normal');
+			const linkText = document.getElementById('linkOferty1').value;
+			const wrappedLinkText = doc.splitTextToSize(linkText, 190);
+			wrappedLinkText.forEach((line, index) => {
+				const yPosition = currentY + index * spacing;
+				doc.text(line, 10, yPosition);
+			});
+			currentY += wrappedLinkText.length * spacing;
+			checkAddPage();
+
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Cena: ", 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+
+			doc.setFont('TimesNewRoman', 'normal');
+			doc.text(`${totalCena.toFixed(2)} zł + dostawa ${totalCenaDostawy.toFixed(2)} zł`, 10, currentY); // Cena i dostawa
+			currentY += spacing;
+			checkAddPage();
+			
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Zdjęcie: ", 10, currentY);
+			currentY += spacing;
+			checkAddPage2();
+
+			// Add first image
+			const photo1 = document.getElementById('photo1').src;
+			if (photo1) {
+				doc.addImage(photo1, 'PNG', 10, currentY, 150, 100);
+				currentY += 110; // Dodajemy wysokość zdjęcia + odstęp
+				checkAddPage2();
+			}
+			
+			const delivery1 = document.getElementById('delivery1').src;
+			if (delivery1) {
+				doc.addImage(delivery1, 'PNG', 10, currentY, 150, 100);
+				currentY += 110; // Dodajemy wysokość zdjęcia + odstęp
+				checkAddPage();
+			}
+
+			// Add counteroffer information
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Kontroferta", 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+			
+			if (sourceFundingSelect.value === 'Środki SKNTI') {
+				currentY = addSKNTIWarning(doc, currentY, spacing);
+			}
+			
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Nazwa kontroferty: ", 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+
+			doc.setFont('TimesNewRoman', 'normal');
+			doc.text(document.getElementById('nazwaOferty2').value, 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Link: ", 10, currentY);
+			currentY += spacing;	
+			checkAddPage();
+
+			doc.setFont('TimesNewRoman', 'normal');
+			const linkText2 = document.getElementById('linkOferty2').value;
+			const wrappedLinkText2 = doc.splitTextToSize(linkText2, 190);
+			wrappedLinkText.forEach((line, index) => {
+				const yPosition2 = currentY + index * spacing;
+				doc.text(line, 10, yPosition2);
+			});
+			currentY += wrappedLinkText.length * spacing;
+			checkAddPage();
+
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Cena: ", 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+
+			doc.setFont('TimesNewRoman', 'normal');
+			doc.text(`${totalCena2.toFixed(2)} zł + dostawa ${totalCenaDostawy2.toFixed(2)} zł`, 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+			
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Zdjęcie: ", 10, currentY);
+			currentY += spacing;
+			checkAddPage2();
+
+			// Add second image
+			const photo2 = document.getElementById('photo2').src;
+			if (photo2) {
+				doc.addImage(photo2, 'PNG', 10, currentY, 150, 100);
+				currentY += 110; // Dodajemy wysokość zdjęcia + odstęp
+				checkAddPage2();
+			}
+			const delivery2 = document.getElementById('delivery2').src;
+			if (delivery2) {
+				doc.addImage(delivery2, 'PNG', 10, currentY, 150, 100);
+				currentY += 110; // Dodajemy wysokość zdjęcia + odstęp
+				checkAddPage();
+			}
+
+			// Zresetowanie czcionki i koloru
+			doc.setFont('TimesNewRoman', 'normal');
+			doc.setTextColor(0, 0, 0);
+
+			if (sourceFundingSelect.value === 'Środki SKNTI') {
+				currentY = addSKNTIWarning(doc, currentY, spacing);
+			}
+
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Szacunkowa wartość jako średnia arytmetyczna załączonych ofert bez VAT: ", 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+
+			doc.setFont('TimesNewRoman', 'normal');
+			doc.text(`(${nettocena.toFixed(2)} zł + ${nettocenadostawy.toFixed(2)} + ${nettocena2.toFixed(2)} zł + ${nettocenadostawy2.toFixed(2)} zł )/2 = ${srednia.toFixed(2)}`, 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+			
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Ostateczny wybor oferty: ", 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+
+			doc.setFont('TimesNewRoman', 'normal');
+			doc.text(document.getElementById('FinalOffer').value, 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Przeznaczone środki: ", 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+
+			doc.setFont('TimesNewRoman', 'normal');
+			doc.text(document.getElementById('amount').value + " zł", 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+			
+			doc.setFont('TimesNewRoman', 'bold');
+			doc.text("Źródło finansowania: ", 10, currentY);
+			currentY += spacing;
+			checkAddPage();
+
+			const maxLineWidth = 180;
+			doc.setFont('TimesNewRoman', 'normal');
+			
+			if (sourceFundingSelect.value === 'Środki SKNTI') {
+				const longsourceFundingSelect = "Płatne ze środków Ministerstwa Nauki i Szkolnictwa Wyższego na podstawie umowy nr SKN/SP/601717/2024 z dnia 28.05.2024, działania nr " 
+								+ document.getElementById('SKNTINr').value + " w kwocie " 
+								+ document.getElementById('SKNTICost').value + " zł.";
+				
+				const wrappedsourceFundingSelect = doc.splitTextToSize(longsourceFundingSelect, maxLineWidth);
+				doc.text(wrappedsourceFundingSelect, 10, currentY);
+			}
+			else if (sourceFundingSelect.value === 'Środki Rektora') {
+				doc.text("Środki Rektorskie", 10, currentY);
+			}
+			else {
+				doc.text(sourceFundingValue, 10, currentY);
+			}
+			currentY += spacing;
+			checkAddPage();
+			
+			
+			const currentYear = new Date().getFullYear();
+			const nameValue = document.getElementById('Name').value.trim();
+			let fileName;
+			if (sourceFundingSelect.value === 'Środki SKNTI') {
+				fileName = nameValue ? 'SKNTI24-25' + '_' + nameValue + '.pdf' : '2024.pdf';
+			}
+			else if (sourceFundingSelect.value === 'Środki Rektora') {
+				fileName = nameValue ? currentYear + '_' + nameValue + '.pdf' : currentYear + '.pdf';
+			}
+			else {
+				fileName = nameValue ? nameValue + '.pdf' : 'zamówienie publiczne.pdf';
+			}
+			
+
+			// Zapisz plik PDF z odpowiednią nazwą
+			doc.save(fileName);
+		}
+	</script>
+
+	</body>
+	</html>
